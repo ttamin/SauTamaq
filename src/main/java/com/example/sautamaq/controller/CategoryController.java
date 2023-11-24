@@ -18,7 +18,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-
     @PostMapping("/add")
     public ResponseEntity<Category> createCategory(@RequestBody CategoryDto categoryDto){
         Category category = categoryService.addCategory(categoryDto);
@@ -40,5 +39,17 @@ public class CategoryController {
     public ResponseEntity<String> updateCategory(@PathVariable long id, @RequestBody Category updatedCategory) {
             categoryService.updateCategory(id, updatedCategory);
             return ResponseEntity.ok("Category updated successfully");
+    }
+
+    //that can be used for user
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable long id) {
+        Category category = categoryService.getCategoryById(id);
+
+        if (category != null && category.isActive()) {
+            return ResponseEntity.ok(category);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

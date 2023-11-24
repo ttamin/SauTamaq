@@ -4,9 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Service
@@ -34,14 +32,9 @@ public class JwtService {
                     .build()
                     .parseClaimsJws(jwt);
         } catch (Exception e) {
-            // Handle the exception, e.g., log it or throw a custom exception
             throw new RuntimeException("Invalid JWT: " + e.getMessage());
         }
     }
-//    public void validateJwt(String jwt) {
-//        Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes(UTF_8)))
-//                .build().parseClaimsJws(jwt);
-//    }
 
     public String getUsernameFromJwt(String jwt) {
         return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes(UTF_8)))

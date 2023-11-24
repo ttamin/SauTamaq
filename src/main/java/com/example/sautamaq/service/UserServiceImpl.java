@@ -8,7 +8,6 @@ import com.example.sautamaq.repository.UserRepository;
 import com.example.sautamaq.security.JwtService;
 import com.example.sautamaq.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+//    private final JwtService jwtService;
     @Override
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {

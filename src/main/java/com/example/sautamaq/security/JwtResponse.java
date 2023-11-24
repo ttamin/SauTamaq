@@ -1,5 +1,4 @@
 package com.example.sautamaq.security;
-
 import lombok.Data;
 
 @Data

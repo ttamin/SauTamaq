@@ -1,9 +1,7 @@
 package com.example.sautamaq.controller;
 
 import com.example.sautamaq.dto.RecipeDto;
-import com.example.sautamaq.exception.RecipeNotFoundException;
 import com.example.sautamaq.model.Recipe;
-import com.example.sautamaq.repository.RecipeRepository;
 import com.example.sautamaq.service.RecipeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

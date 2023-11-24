@@ -3,7 +3,6 @@ package com.example.sautamaq.service;
 import com.example.sautamaq.model.Ingredient;
 import com.example.sautamaq.service.impl.IngredientService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

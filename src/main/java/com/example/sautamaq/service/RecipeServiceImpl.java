@@ -2,7 +2,6 @@ package com.example.sautamaq.service;
 
 import com.example.sautamaq.dto.RecipeDto;
 import com.example.sautamaq.exception.RecipeNotFoundException;
-import com.example.sautamaq.model.Category;
 import com.example.sautamaq.model.Recipe;
 import com.example.sautamaq.repository.RecipeRepository;
 import com.example.sautamaq.service.impl.RecipeService;

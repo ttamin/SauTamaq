@@ -2,9 +2,7 @@ package com.example.sautamaq.service.impl;
 
 import com.example.sautamaq.dto.UserDto;
 import com.example.sautamaq.model.User;
-import com.example.sautamaq.service.UserServiceImpl;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
