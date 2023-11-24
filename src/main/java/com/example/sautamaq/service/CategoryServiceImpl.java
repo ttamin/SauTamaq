@@ -2,12 +2,16 @@ package com.example.sautamaq.service;
 
 import com.example.sautamaq.dto.CategoryDto;
 import com.example.sautamaq.exception.CategoryAlreadyExistsException;
+import com.example.sautamaq.exception.CategoryNotFoundException;
+import com.example.sautamaq.exception.RecipeNotFoundException;
 import com.example.sautamaq.model.Category;
+import com.example.sautamaq.model.Recipe;
 import com.example.sautamaq.repository.CategoryRepository;
 import com.example.sautamaq.service.impl.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,20 +29,35 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll();
     }
     @Override
-    public void addCategory(CategoryDto categoryDto){
+    public Category addCategory(CategoryDto categoryDto){
         if(categoryRepository.existsByName(categoryDto.getName())){
             throw new CategoryAlreadyExistsException("Category with than name is already exists");
         }
         Category category = new Category();
         category.setName(categoryDto.getName());
-        categoryRepository.save(category);
+        category.setActive(true);
+        return categoryRepository.save(category);
     }
     @Override
     public void removeCategoryById(long id){
-        categoryRepository.deleteById(id);
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+
+        if (categoryOptional.isPresent()) {
+            categoryRepository.deleteById(id);
+        } else {
+            throw new CategoryNotFoundException("Category with ID " + id + " not found");
+        }
     }
     @Override
-    public Optional<Category> getCategoryById(long id){
-        return categoryRepository.findById(id);
+    public void updateCategory(long id, Category updatedCategory) {
+        Optional<Category> existingCategoryOptional = categoryRepository.findById(id);
+        if (existingCategoryOptional.isPresent()) {
+            Category existingCategory = existingCategoryOptional.get();
+            existingCategory.setName(updatedCategory.getName());
+            categoryRepository.save(existingCategory);
+        } else {
+            throw new CategoryNotFoundException("Category with ID " + id + " not found");
+        }
     }
+
 }

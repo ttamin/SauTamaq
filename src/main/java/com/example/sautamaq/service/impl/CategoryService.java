@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface CategoryService {
         List<Category> getAllCategory();
-        void addCategory(CategoryDto categoryDto);
+        Category addCategory(CategoryDto categoryDto);
         void removeCategoryById(long id);
-        Optional<Category> getCategoryById(long id);
 
+        void updateCategory(long id, Category updatedCategory);
 }
