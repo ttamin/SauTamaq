@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -29,8 +30,6 @@ public class Recipe {
     private byte[] imageData;
     @Column(nullable = false)
     private int cookingTime;
-    @OneToMany
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Ingredient> ingredients;
-
-}
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+    }

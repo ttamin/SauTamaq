@@ -16,6 +16,8 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
+
+
 }

@@ -40,7 +40,9 @@ public class SecurityConfig {
                     auth.requestMatchers("/login/**").permitAll();
                     auth.requestMatchers("/logout/**").permitAll();
                     auth.requestMatchers("/error/**").permitAll();
-                    auth.requestMatchers("secured").authenticated();
+                    auth.requestMatchers(" /secured").authenticated();
+                    auth.requestMatchers("/category/**").permitAll();
+                    auth.requestMatchers("/recipe/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->

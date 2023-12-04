@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -29,7 +29,7 @@ public class CategoryController {
         return categoryService.getAllCategory();
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/delete/{id}")
     public String deleteCategorybyId(@RequestBody CategoryDto categoryDto){
         categoryService.removeCategoryById(categoryDto.getId());
         return "deleted";
