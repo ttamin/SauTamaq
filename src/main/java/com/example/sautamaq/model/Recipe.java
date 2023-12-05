@@ -27,11 +27,11 @@ public class Recipe {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-    @Lob
-    private byte[] imageData;
+    @Column(name = "image_path")
+    private String imagePath;
     @Column(nullable = false)
     private int cookingTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonIgnore
+    @JsonIgnore
     private List<Ingredient> recipeIngredients = new ArrayList<>();
 }

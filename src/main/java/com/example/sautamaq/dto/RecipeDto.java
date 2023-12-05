@@ -13,7 +13,7 @@ public class RecipeDto {
     private Long id;
     private String name;
     private Category category;
-    private byte[] imageData;
+    private String imagePath;
     private int cookingTime;
     private List<IngredientDto> ingredients;
 }

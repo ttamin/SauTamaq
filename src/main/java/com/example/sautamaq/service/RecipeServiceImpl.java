@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,45 +37,50 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe createRecipe(RecipeDto recipeDto) {
+        Objects.requireNonNull(recipeDto, "RecipeDto cannot be null");
 
         Category category = validateAndSetCategory(recipeDto.getCategory());
 
         Recipe recipe = new Recipe();
         recipe.setName(recipeDto.getName());
         recipe.setCategory(category);
-        recipe.setImageData(recipeDto.getImageData());
         recipe.setCookingTime(recipeDto.getCookingTime());
 
+        List<Ingredient> recipeIngredients = createRecipeIngredients(recipeDto.getIngredients());
+        recipe.setRecipeIngredients(recipeIngredients);
+        for (Ingredient ingredient : recipeIngredients) {
+            ingredient.setRecipe(recipe);
+        }
+        return recipeRepository.save(recipe);
+    }
+
+    private List<Ingredient> createRecipeIngredients(List<IngredientDto> ingredientDtos) {
         List<Ingredient> recipeIngredients = new ArrayList<>();
 
-        for (IngredientDto ingredientDto : recipeDto.getIngredients()) {
-            Ingredient recipeIngredient = new Ingredient();
-            recipeIngredient.setName(ingredientDto.getName());
-            recipeIngredient.setQuantity(ingredientDto.getQuantity());
-            recipeIngredients.add(recipeIngredient);
+        if (ingredientDtos != null) {
+            for (IngredientDto ingredientDto : ingredientDtos) {
+                Ingredient recipeIngredient = new Ingredient();
+                recipeIngredient.setName(ingredientDto.getName());
+                recipeIngredient.setQuantity(ingredientDto.getQuantity());
+                recipeIngredients.add(recipeIngredient);
+            }
         }
 
-        recipe.setRecipeIngredients(recipeIngredients);
-        return recipeRepository.save(recipe);
-
+        return recipeIngredients;
     }
-//    private Ingredient validateAndCreateIngredient(String ingredientName) {
-//        Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredientName);
-//
-//        if (existingIngredient.isPresent()) {
-//            return existingIngredient.get();
-//        } else {
-//            Ingredient newIngredient = new Ingredient();
-//            newIngredient.setName(ingredientName);
-//            return ingredientRepository.save(newIngredient);
-//        }
-//    }
-private Category validateAndSetCategory(Category category) {
-    if (category == null) {
-        throw new IllegalArgumentException("Category cannot be null");
+
+    private Category validateAndSetCategory(Category category) {
+        return Objects.requireNonNull(category, "Category cannot be null");
     }
 
 
-    return category;
-}
+    @Override
+    public void updateRecipeImage(Long recipeId, String imagePath) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + recipeId));
+
+        recipe.setImagePath(imagePath);
+        recipeRepository.save(recipe);
+    }
+
 }

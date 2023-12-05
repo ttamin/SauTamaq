@@ -7,12 +7,7 @@ import java.util.List;
 
 public interface RecipeService {
     Recipe createRecipe(RecipeDto recipeDto);
+    void updateRecipeImage(Long recipeId, String imagePath);
 
-//    void updateRecipe(Long id, RecipeDto updatedRecipeDto);
-//
-////    List<RecipeIngredient> getIngredientsByIds(List<Long> ingredientIds);
-//
-//    Recipe getRecipeById(Long id);
-//
-//    void deleteRecipe(Long id);
+
 }
