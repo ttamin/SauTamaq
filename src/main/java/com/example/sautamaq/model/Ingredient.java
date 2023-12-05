@@ -18,6 +18,8 @@ public class Ingredient {
     private Long id;
     @Column(nullable = false, length = 255)
     private String name;
-
-
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
+    private int quantity;
 }

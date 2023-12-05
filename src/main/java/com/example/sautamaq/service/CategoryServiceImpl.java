@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category addCategory(CategoryDto categoryDto) {
         if (categoryRepository.existsByName(categoryDto.getName())) {
-            throw new CategoryAlreadyExistsException("Category with than name is already exists");
+            throw new CategoryAlreadyExistsException("Category with that name is already exists");
         }
         Category category = new Category();
         category.setName(categoryDto.getName());

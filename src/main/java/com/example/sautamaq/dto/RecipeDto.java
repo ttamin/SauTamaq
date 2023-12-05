@@ -1,7 +1,6 @@
 package com.example.sautamaq.dto;
 
 import com.example.sautamaq.model.Category;
-import com.example.sautamaq.model.RecipeIngredient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +15,5 @@ public class RecipeDto {
     private Category category;
     private byte[] imageData;
     private int cookingTime;
-    private List<RecipeIngredientDto> ingredients;
+    private List<IngredientDto> ingredients;
 }
