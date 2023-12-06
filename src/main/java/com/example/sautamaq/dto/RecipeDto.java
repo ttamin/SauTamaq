@@ -12,8 +12,9 @@ import java.util.List;
 public class RecipeDto {
     private Long id;
     private String name;
-    private Category category;
+    private CategoryDto category;
     private String imagePath;
+    private byte[] imageData;
     private int cookingTime;
     private List<IngredientDto> ingredients;
 }

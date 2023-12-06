@@ -29,9 +29,15 @@ public class Recipe {
     private Category category;
     @Column(name = "image_path")
     private String imagePath;
+    @Lob
+    @Column(name = "image_data")
+    private byte[] imageData;
     @Column(nullable = false)
     private int cookingTime;
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Ingredient> recipeIngredients = new ArrayList<>();
+    public List<Ingredient> getIngredients() {
+        return recipeIngredients;
+    }
 }
