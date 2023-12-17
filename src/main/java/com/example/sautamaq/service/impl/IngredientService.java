@@ -6,6 +6,6 @@ import com.example.sautamaq.model.Ingredient;
 import java.util.List;
 
 public interface IngredientService {
-    List<Ingredient> getIngredientsByIds(List<Long> collect);
+    Ingredient getIngredientById(Long id);
 
-    }
+}

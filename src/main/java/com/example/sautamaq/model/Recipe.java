@@ -34,10 +34,13 @@ public class Recipe {
     private byte[] imageData;
     @Column(nullable = false)
     private int cookingTime;
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Ingredient> recipeIngredients = new ArrayList<>();
-    public List<Ingredient> getIngredients() {
-        return recipeIngredients;
-    }
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Instruction> recipeInstructions = new ArrayList<>();
+    @Column(nullable = false)
+    private String level;
+
 }

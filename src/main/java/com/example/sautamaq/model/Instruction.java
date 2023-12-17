@@ -1,30 +1,27 @@
 package com.example.sautamaq.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Arrays;
-
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@Data
 @Entity
-@Table(name = "categories")
+@Table(name = "instructions")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class Instruction {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
-    private boolean isActive;
-    @Column(name = "image_path")
-    private String imagePath;
-    @Lob
-    @Column(name = "image_data")
-    private byte[] imageData;
-
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    @JsonIgnore
+    private Recipe recipe;
+    private int step;
 }
