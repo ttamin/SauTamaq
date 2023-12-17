@@ -18,13 +18,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-//    private final JwtService jwtService;
+
     @Override
-    public User createUser(User user) {
+    public User createAdmin(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("User with that email is already registered");
         }
+
+        user.setRole("ADMIN");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActive(true);
         return userRepository.save(user);
     }
 

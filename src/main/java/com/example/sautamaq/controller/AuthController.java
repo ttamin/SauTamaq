@@ -27,6 +27,15 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        return handleAuthentication(loginDto, "ROLE_USER");
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<?> loginAdmin(@RequestBody LoginDto loginDto) {
+        return handleAuthentication(loginDto, "ROLE_ADMIN");
+    }
+
+    private ResponseEntity<?> handleAuthentication(LoginDto loginDto, String requiredRole) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -38,8 +47,8 @@ public class AuthController {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
-            String token = jwtService.generateToken(loginDto.getEmail(), authentication.getAuthorities()
-                    .stream().map(GrantedAuthority::getAuthority).findFirst().orElse(null));
+
+            String token = jwtService.generateToken(loginDto.getEmail(), requiredRole);
 
             JwtResponse response = new JwtResponse(token);
             return ResponseEntity.ok(response);
@@ -47,4 +56,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + e.getMessage());
         }
     }
+
 }
