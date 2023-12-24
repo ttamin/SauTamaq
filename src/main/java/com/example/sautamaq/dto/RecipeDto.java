@@ -23,4 +23,6 @@ public class RecipeDto {
     private List<IngredientDto> ingredients;
     private List<InstructionDto> instructions;
     private String level;
+    private int calorie;
+
 }

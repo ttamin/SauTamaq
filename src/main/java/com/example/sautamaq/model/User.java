@@ -1,5 +1,6 @@
 package com.example.sautamaq.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -27,8 +29,16 @@ public class User {
     @Column(nullable = false)
     private String username;
     private String role;
-    @OneToMany
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Recipe> favourites;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "user_favorite_recipes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+
+    private List<Recipe> favorites = new ArrayList<>();
     private boolean isActive;
+
+
 }

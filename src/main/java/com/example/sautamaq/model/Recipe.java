@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +24,7 @@ public class Recipe {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JsonIgnore
     private Category category;
     @Column(name = "image_path")
     private String imagePath;
@@ -42,5 +41,7 @@ public class Recipe {
     private List<Instruction> recipeInstructions = new ArrayList<>();
     @Column(nullable = false)
     private String level;
-
+    @ManyToMany(mappedBy = "favorites")
+    private List<User> favoritedByUsers = new ArrayList<>();
+    private int calorie;
 }

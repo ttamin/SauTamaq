@@ -5,14 +5,12 @@ import com.example.sautamaq.dto.IngredientDto;
 import com.example.sautamaq.dto.InstructionDto;
 import com.example.sautamaq.dto.RecipeDto;
 import com.example.sautamaq.exception.CategoryAlreadyExistsException;
-import com.example.sautamaq.exception.NotFoundException;
 import com.example.sautamaq.exception.RecipeNotFoundException;
 import com.example.sautamaq.model.Category;
 import com.example.sautamaq.model.Ingredient;
 import com.example.sautamaq.model.Instruction;
 import com.example.sautamaq.model.Recipe;
 import com.example.sautamaq.repository.CategoryRepository;
-import com.example.sautamaq.repository.IngredientRepository;
 import com.example.sautamaq.repository.RecipeRepository;
 import com.example.sautamaq.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +27,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
-    private final IngredientRepository ingredientRepository;
-
-    private final IngredientService ingredientService;
     private final CategoryService categoryService;
     private final ImageService imageService;
     private final CategoryRepository categoryRepository;
 
-
-
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, IngredientService ingredientService, CategoryService categoryService, ImageService imageService, CategoryRepository categoryRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, CategoryService categoryService,
+                             ImageService imageService, CategoryRepository categoryRepository) {
         this.recipeRepository = recipeRepository;
-        this.ingredientRepository = ingredientRepository;
-        this.ingredientService = ingredientService;
         this.categoryService = categoryService;
         this.imageService = imageService;
         this.categoryRepository = categoryRepository;
@@ -59,6 +51,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setCategory(category);
         recipe.setCookingTime(recipeDto.getCookingTime());
         recipe.setLevel(recipeDto.getLevel());
+        recipe.setCalorie(recipe.getCalorie());
 
         List<Ingredient> recipeIngredients = createRecipeIngredients(recipeDto.getIngredients());
         recipe.setRecipeIngredients(recipeIngredients);
@@ -133,7 +126,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public CompletableFuture<Void> uploadRecipeImageAsync(Long recipeId, MultipartFile file) {
         try {
-            String imagePath = imageService.uploadImage(file, recipeId);
+            String imagePath = imageService.uploadRecipeImage(file, recipeId);
             byte[] imageBytes = file.getBytes();
             uploadRecipeImage(recipeId, imagePath, imageBytes);
             return CompletableFuture.completedFuture(null);
@@ -177,9 +170,19 @@ public class RecipeServiceImpl implements RecipeService {
                         recipe.getCookingTime(),
                 convertIngredientsToDto(recipe.getRecipeIngredients()),
                 convertInstructionsToDto(recipe.getRecipeInstructions()),
-                recipe.getLevel())
+                recipe.getLevel(),
+                recipe.getCalorie())
                 ;
     }
+
+    @Override
+    public List<RecipeDto> getAllRecipes() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        return recipes.stream()
+                .map(this::convertRecipeToDto)
+                .collect(Collectors.toList());
+    }
+
     private CategoryDto convertCategoryToDto(Category category) {
         return new CategoryDto(category.getId(), category.getName(), category.isActive(), category.getImagePath(), category.getImageData());
     }
@@ -219,6 +222,7 @@ public class RecipeServiceImpl implements RecipeService {
         existingRecipe.setCategory(updatedCategory);
         existingRecipe.setCookingTime(updatedRecipeDto.getCookingTime());
         existingRecipe.setLevel(updatedRecipeDto.getLevel());
+        existingRecipe.setCalorie(updatedRecipeDto.getCalorie());
 
         updateRecipeIngredients(existingRecipe.getRecipeIngredients(), updatedRecipeDto.getIngredients());
         updateRecipeInstructions(existingRecipe.getRecipeInstructions(), updatedRecipeDto.getInstructions());
@@ -268,84 +272,6 @@ public class RecipeServiceImpl implements RecipeService {
         existingInstruction.setStep(updatedInstructionDto.getStep());
     }
 
-
-
-
-//    @Override
-//    @Transactional
-//    public Recipe updateRecipe(Long recipeId, Recipe updatedRecipe) {
-//        Recipe existingRecipe = recipeRepository.findById(recipeId)
-//                .orElseThrow(() -> new RecipeNotFoundException("Рецепт с ID " + recipeId + " не найден"));
-//
-//        // Обновление данных рецепта
-//        updateRecipeDetails(existingRecipe, updatedRecipe);
-//
-//        // Сохранение обновленного рецепта
-//        recipeRepository.save(existingRecipe);
-//
-//        System.out.println("Рецепт успешно обновлен: " + existingRecipe);
-//
-//        return existingRecipe;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void updateIngredients(Long recipeId, List<Ingredient> updatedIngredients) {
-//        Recipe existingRecipe = recipeRepository.findById(recipeId)
-//                .orElseThrow(() -> new RecipeNotFoundException("Рецепт с ID " + recipeId + " не найден"));
-//
-//        existingRecipe.getRecipeIngredients().forEach(existingIngredient -> {
-//            if (!updatedIngredients.contains(existingIngredient)) {
-//                existingIngredient.setRecipe(null); // Удаление связи с рецептом
-//            }
-//        });
-//
-//        existingRecipe.getRecipeIngredients().removeIf(existingIngredient -> !updatedIngredients.contains(existingIngredient));
-//
-//        updatedIngredients.forEach(updatedIngredient -> {
-//            if (!existingRecipe.getRecipeIngredients().contains(updatedIngredient)) {
-//                updatedIngredient.setRecipe(existingRecipe); // Установка связи с рецептом
-//                existingRecipe.getRecipeIngredients().add(updatedIngredient);
-//            }
-//        });
-//
-//        System.out.println("Ингредиенты обновлены: " + existingRecipe.getRecipeIngredients());
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void updateInstructions(Long recipeId, List<Instruction> updatedInstructions) {
-//        Recipe existingRecipe = recipeRepository.findById(recipeId)
-//                .orElseThrow(() -> new RecipeNotFoundException("Рецепт с ID " + recipeId + " не найден"));
-//
-//        existingRecipe.getRecipeInstructions().forEach(existingInstruction -> {
-//            if (!updatedInstructions.contains(existingInstruction)) {
-//                existingInstruction.setRecipe(null); // Удаление связи с рецептом
-//            }
-//        });
-//
-//        existingRecipe.getRecipeInstructions().removeIf(existingInstruction -> !updatedInstructions.contains(existingInstruction));
-//
-//        updatedInstructions.forEach(updatedInstruction -> {
-//            if (!existingRecipe.getRecipeInstructions().contains(updatedInstruction)) {
-//                updatedInstruction.setRecipe(existingRecipe); // Установка связи с рецептом
-//                existingRecipe.getRecipeInstructions().add(updatedInstruction);
-//            }
-//        });
-//
-//        System.out.println("Инструкции обновлены: " + existingRecipe.getRecipeInstructions());
-//    }
-//
-//    private void updateRecipeDetails(Recipe existingRecipe, Recipe updatedRecipe) {
-//        existingRecipe.setName(updatedRecipe.getName());
-//        existingRecipe.setCategory(updatedRecipe.getCategory());
-//        existingRecipe.setImagePath(updatedRecipe.getImagePath());
-//        existingRecipe.setImageData(updatedRecipe.getImageData());
-//        existingRecipe.setCookingTime(updatedRecipe.getCookingTime());
-//        existingRecipe.setLevel(updatedRecipe.getLevel());
-//    }
-
-
     @Override
     @Transactional
     public void deleteRecipe(Long recipeId) {
@@ -355,5 +281,6 @@ public class RecipeServiceImpl implements RecipeService {
             throw new RuntimeException("Ошибка при удалении рецепта. Обратитесь к администратору.", e);
         }
     }
+
 
 }

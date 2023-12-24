@@ -2,6 +2,7 @@ package com.example.sautamaq.controller;
 
 import com.example.sautamaq.dto.RecipeDto;
 import com.example.sautamaq.exception.RecipeNotFoundException;
+import com.example.sautamaq.model.Category;
 import com.example.sautamaq.model.Ingredient;
 import com.example.sautamaq.model.Recipe;
 import com.example.sautamaq.service.impl.ImageService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -102,5 +104,8 @@ public class RecipeController {
             return new ResponseEntity<>("Ошибка при удалении рецепта. Обратитесь к администратору.", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/all")
+    public List<RecipeDto> getAllRecipes(){
+        return recipeService.getAllRecipes();
+    }
 }

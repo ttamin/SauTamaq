@@ -1,9 +1,6 @@
 package com.example.sautamaq.service.impl;
 
 import com.example.sautamaq.dto.RecipeDto;
-import com.example.sautamaq.model.Category;
-import com.example.sautamaq.model.Ingredient;
-import com.example.sautamaq.model.Instruction;
 import com.example.sautamaq.model.Recipe;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +17,6 @@ public interface RecipeService {
 
     Recipe updateRecipeWithoutImage(Long recipeId, RecipeDto updatedRecipeDto);
     RecipeDto convertRecipeToDto(Recipe recipe);
+    List<RecipeDto> getAllRecipes();
+
 }

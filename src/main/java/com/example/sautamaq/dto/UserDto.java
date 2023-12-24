@@ -1,6 +1,7 @@
 package com.example.sautamaq.dto;
 
 import com.example.sautamaq.model.Recipe;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,8 @@ public class UserDto {
     @JsonProperty(access = WRITE_ONLY)
     private String password;
     private String username;
-    private List<Recipe> favs;
+    @JsonIgnore
+    private List<Recipe> favourites;
     private String role;
     private boolean isActive;
 }

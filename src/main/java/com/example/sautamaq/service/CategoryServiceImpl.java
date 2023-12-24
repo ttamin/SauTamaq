@@ -77,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CompletableFuture<Void> uploadRecipeImageAsync(Long categoryId, MultipartFile file) {
         try{
-            String imagePath = imageService.uploadImage(file, categoryId);
+            String imagePath = imageService.uploadCategoryImage(file, categoryId);
             byte[] imageBytes = file.getBytes();
             uploadRecipeImage(categoryId, imagePath, imageBytes);
             return CompletableFuture.completedFuture(null);
