@@ -51,7 +51,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setCategory(category);
         recipe.setCookingTime(recipeDto.getCookingTime());
         recipe.setLevel(recipeDto.getLevel());
-        recipe.setCalorie(recipe.getCalorie());
+        recipe.setCalorie(recipeDto.getCalorie());
 
         List<Ingredient> recipeIngredients = createRecipeIngredients(recipeDto.getIngredients());
         recipe.setRecipeIngredients(recipeIngredients);
@@ -120,8 +120,6 @@ public class RecipeServiceImpl implements RecipeService {
         return category;
     }
 
-
-
     @Async
     @Override
     public CompletableFuture<Void> uploadRecipeImageAsync(Long recipeId, MultipartFile file) {
@@ -175,6 +173,26 @@ public class RecipeServiceImpl implements RecipeService {
                 ;
     }
 
+
+    @Override
+    public List<IngredientDto> getIngredientsByRecipe(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+        return recipe.getRecipeIngredients().stream()
+                .map(this::convertIngredientToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InstructionDto> getInstructionsByRecipe(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+        return recipe.getRecipeInstructions().stream()
+                .map(this::convertInstructionToDto)
+                .collect(Collectors.toList());
+    }
     @Override
     public List<RecipeDto> getAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
@@ -182,6 +200,27 @@ public class RecipeServiceImpl implements RecipeService {
                 .map(this::convertRecipeToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<RecipeDto> getRecipesByCategory(Long categoryId) {
+        Category category = new Category();
+        category.setId(categoryId);
+
+        List<Recipe> recipes = recipeRepository.findByCategory(category);
+
+        return recipes.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private RecipeDto convertToDto(Recipe recipe) {
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setName(recipe.getName());
+        recipeDto.setImageData(recipe.getImageData());
+        recipeDto.setCookingTime(recipe.getCookingTime());
+        return recipeDto;
+
+}
 
     private CategoryDto convertCategoryToDto(Category category) {
         return new CategoryDto(category.getId(), category.getName(), category.isActive(), category.getImagePath(), category.getImageData());

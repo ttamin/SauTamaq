@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "exp://192.168.8.254:8081")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {

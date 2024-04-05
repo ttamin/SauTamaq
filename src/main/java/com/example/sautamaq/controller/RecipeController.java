@@ -1,5 +1,7 @@
 package com.example.sautamaq.controller;
 
+import com.example.sautamaq.dto.IngredientDto;
+import com.example.sautamaq.dto.InstructionDto;
 import com.example.sautamaq.dto.RecipeDto;
 import com.example.sautamaq.exception.RecipeNotFoundException;
 import com.example.sautamaq.model.Category;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@CrossOrigin(origins = "exp://192.168.0.14:8081")
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -37,6 +40,20 @@ public class RecipeController {
         this.ingredientService = ingredientService;
     }
 
+    @GetMapping("/category/{categoryId}")
+    public List<RecipeDto> getRecipesByCategory(@PathVariable Long categoryId) {
+        System.out.println("Received request for category: " + categoryId);
+        return recipeService.getRecipesByCategory(categoryId);
+    }
+    @GetMapping("/{recipeId}/instructions")
+    public List<InstructionDto> getInstructionsByRecipe(@PathVariable Long recipeId) {
+        return recipeService.getInstructionsByRecipe(recipeId);
+    }
+
+    @GetMapping("/{recipeId}/ingredients")
+    public List<IngredientDto> getIngredientsByRecipe(@PathVariable Long recipeId) {
+        return recipeService.getIngredientsByRecipe(recipeId);
+    }
     @PostMapping("/create")
     public ResponseEntity<Recipe> createRecipe(@RequestBody RecipeDto recipeDto) {
         Recipe createdRecipe = recipeService.createRecipe(recipeDto);
@@ -104,8 +121,5 @@ public class RecipeController {
             return new ResponseEntity<>("Ошибка при удалении рецепта. Обратитесь к администратору.", HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/all")
-    public List<RecipeDto> getAllRecipes(){
-        return recipeService.getAllRecipes();
-    }
+
 }

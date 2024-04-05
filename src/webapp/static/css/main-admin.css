@@ -1,0 +1,183 @@
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #F2F9FF;
+    border-right: 1px solid #5B000B;
+    height: 100vh;
+
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    grid-template-rows: 117px 1fr;/* ширина header */
+}
+
+/*header */
+.header{
+    background-color: #FF7081;
+    /*border-bottom: 3px solid #FFB7C0;*/
+
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+.header nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 35px 210px;
+}
+
+nav a{
+    font-weight: 700;
+    font-size: 30px;
+    color: #222222;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 12px;
+    background-color: #FFF5F7;
+}
+
+nav a:hover{
+    opacity: 80%;
+}
+
+/* sidebar */
+.sidebar{
+    background-color: #ffffff;
+    height: 100vh;
+
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+}
+
+.logo a, .sidebar ul a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.logo a{
+    padding: 30px 105px;
+}
+
+.sidebar ul a{
+    font-weight: 600;
+    font-size: 26px;
+    padding: 14px 39px;
+    color:  #222222;
+    border-radius: 15px;
+
+    margin: 11px 30px;
+}
+
+.sidebar ul a:hover{
+    background: #FF7081;
+    color: #ffffff;
+}
+
+/* main-menu */
+.main{
+    background-color: #FFF5F7;
+
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+.main h1{
+    margin-top: 168px;
+    font-weight: 700;
+    font-size: 64px;
+    color: #222222;
+    margin-left: 44px;
+}
+
+/* table style for categories, products, blogs */
+.container{
+    margin: 27px 40px;
+}
+
+.thead-light tr th{
+    font-weight: 700;
+    font-size: 22px;
+    color: #222222;
+    padding: 15px;
+    text-align: center;
+}
+
+.tbody-light tr td, .tbody-light tr th{
+    font-weight: 500;
+    font-size: 20px;
+    color: #222222;
+    padding: 16px;
+    text-align: center;
+}
+
+/* buttons: delete, update*/
+.btn-delete, .btn-update{
+    font-weight: 500;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #FF364F;
+    text-decoration: none;
+    border:none;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+}
+
+.btn-update{
+    background-color: #369EFF;
+}
+
+.btn-delete:hover, .btn-update:hover{
+    opacity: 35%;
+    border-color: #222222;
+}
+
+/* add categories*/
+.add-container{
+    margin: 42px 55px;
+}
+.form-group h3{
+    font-weight: 700;
+    font-size: 20px;
+    color: #222222;
+
+}
+
+.form-group input{
+    margin: 7px 0 15px;
+    border-radius: 12px;
+    padding: 15px 27px;
+}
+
+.form-control-check{
+    margin-bottom: 15px;
+}
+
+.form-control-check h3{
+    font-weight: 700;
+    font-size: 20px;
+    color: #222222;
+}
+
+.form-control-checkbox{
+    transform: scale(1.5); /* Измените значение, чтобы увеличить или уменьшить размер флажка */
+}
+
+.btn-submit{
+    background-color: #FEE357;
+    font-weight: 500;
+    font-size: 18px;
+    color: #222222;
+    cursor: pointer;
+
+    border: 1px solid #FEE357;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.btn-submit:hover{
+    opacity: 75%;
+    border: 1px solid #DFBF15;
+}

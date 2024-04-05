@@ -12,7 +12,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "ingredients")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -24,4 +23,36 @@ public class Ingredient {
     @JsonIgnore
     private Recipe recipe;
     private int quantity;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

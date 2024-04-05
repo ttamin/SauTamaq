@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "exp://192.168.0.14:8081")
 
 public class UserController {
     private final UserService userService;
@@ -21,6 +22,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping()
+    public String Hi(){
+        return "hi ";
+    }
     @PostMapping("/register/admin")
     public User registerAdmin(@RequestBody User user) {
         return userService.createAdmin(user);
@@ -54,7 +59,7 @@ public class UserController {
         User updatedUser = userService.addToFavorites(userId, recipeId);
 
         if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
