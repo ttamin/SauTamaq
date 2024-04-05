@@ -63,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
 
             return fileName;
         } catch (IOException e) {
-            throw new ImageUploadException("Failed to upload image", e);
+            throw new ImageUploadException("Failed to upload image");
         }
     }
 

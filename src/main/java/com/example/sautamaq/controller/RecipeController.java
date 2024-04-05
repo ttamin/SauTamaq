@@ -3,11 +3,9 @@ package com.example.sautamaq.controller;
 import com.example.sautamaq.dto.IngredientDto;
 import com.example.sautamaq.dto.InstructionDto;
 import com.example.sautamaq.dto.RecipeDto;
-import com.example.sautamaq.exception.RecipeNotFoundException;
-import com.example.sautamaq.model.Category;
+import com.example.sautamaq.exception.NotFoundException;
 import com.example.sautamaq.model.Ingredient;
 import com.example.sautamaq.model.Recipe;
-import com.example.sautamaq.service.impl.ImageService;
 import com.example.sautamaq.service.impl.IngredientService;
 import com.example.sautamaq.service.impl.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +24,14 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/recipe")
 public class RecipeController {
     private final RecipeService recipeService;
-    private final ImageService imageService;
     private final AsyncTaskExecutor asyncTaskExecutor;
     private final IngredientService ingredientService;
 
 
 
     @Autowired
-    public RecipeController(RecipeService recipeService, ImageService imageService, AsyncTaskExecutor asyncTaskExecutor, IngredientService ingredientService) {
+    public RecipeController(RecipeService recipeService, AsyncTaskExecutor asyncTaskExecutor, IngredientService ingredientService) {
         this.recipeService = recipeService;
-        this.imageService = imageService;
         this.asyncTaskExecutor = asyncTaskExecutor;
         this.ingredientService = ingredientService;
     }
@@ -115,7 +111,7 @@ public class RecipeController {
         try {
             recipeService.deleteRecipe(recipeId);
             return new ResponseEntity<>("Рецепт успешно удален", HttpStatus.OK);
-        } catch (RecipeNotFoundException e) {
+        } catch (NotFoundException e) {
             return new ResponseEntity<>("Рецепт с ID " + recipeId + " не найден", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Ошибка при удалении рецепта. Обратитесь к администратору.", HttpStatus.BAD_REQUEST);

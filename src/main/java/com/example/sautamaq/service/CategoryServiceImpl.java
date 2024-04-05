@@ -2,8 +2,7 @@ package com.example.sautamaq.service;
 
 import com.example.sautamaq.dto.CategoryDto;
 import com.example.sautamaq.exception.CategoryAlreadyExistsException;
-import com.example.sautamaq.exception.CategoryNotFoundException;
-import com.example.sautamaq.exception.RecipeNotFoundException;
+import com.example.sautamaq.exception.NotFoundException;
 import com.example.sautamaq.model.Category;
 import com.example.sautamaq.repository.CategoryRepository;
 import com.example.sautamaq.service.impl.CategoryService;
@@ -50,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryOptional.isPresent()) {
             categoryRepository.deleteById(id);
         } else {
-            throw new CategoryNotFoundException("Category with ID " + id + " not found");
+            throw new NotFoundException("Category with ID " + id + " not found");
         }
     }
 
@@ -63,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
                 existingCategory.setActive(updatedCategory.isActive());
                 categoryRepository.save(existingCategory);
         } else {
-            throw new CategoryNotFoundException("Category with ID " + id + " not found");
+            throw new NotFoundException("Category with ID " + id + " not found");
         }
     }
 
@@ -90,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public void uploadRecipeImage(Long categoryId, String imagePath, byte[] imageBytes) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + categoryId));
+                .orElseThrow(() -> new NotFoundException("Recipe not found with id: " + categoryId));
         category.setImagePath(imagePath);
         category.setImageData(imageBytes);
         categoryRepository.save(category);

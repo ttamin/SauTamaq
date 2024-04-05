@@ -5,7 +5,7 @@ import com.example.sautamaq.dto.IngredientDto;
 import com.example.sautamaq.dto.InstructionDto;
 import com.example.sautamaq.dto.RecipeDto;
 import com.example.sautamaq.exception.CategoryAlreadyExistsException;
-import com.example.sautamaq.exception.RecipeNotFoundException;
+import com.example.sautamaq.exception.NotFoundException;
 import com.example.sautamaq.model.Category;
 import com.example.sautamaq.model.Ingredient;
 import com.example.sautamaq.model.Instruction;
@@ -137,7 +137,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     public void uploadRecipeImage(Long recipeId, String imagePath, byte[] imageBytes) {
         Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + recipeId));
+                .orElseThrow(() -> new NotFoundException("Recipe not found with id: " + recipeId));
         recipe.setImagePath(imagePath);
         recipe.setImageData(imageBytes);
         recipeRepository.save(recipe);
@@ -152,7 +152,7 @@ public class RecipeServiceImpl implements RecipeService {
             RecipeDto recipeDto = convertRecipeToDto(recipe);
             return recipeDto;
         } else {
-            throw new RecipeNotFoundException("Recipe with ID " + id + " not found");
+            throw new NotFoundException("Recipe with ID " + id + " not found");
         }
     }
     @Override
@@ -254,7 +254,7 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         Recipe existingRecipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + recipeId));
+                .orElseThrow(() -> new NotFoundException("Recipe not found with id: " + recipeId));
 
         Category updatedCategory = validateAndSetCategory(updatedRecipeDto.getCategory());
         existingRecipe.setName(updatedRecipeDto.getName());
